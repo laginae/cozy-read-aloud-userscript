@@ -65,7 +65,7 @@ await writeFile('dist/cozy-read-aloud.user.js',output);
 await writeFile('dist/reader.html',html);
 await cp('public/demo.html','dist/demo.html');
 for(const file of ['README.md','README.zh-CN.md','TESTING.md','RELEASE_NOTES.md','LICENSE'])await cp(file,'dist/'+file);
-const licenseFiles = ['vendor/web/LICENSE','vendor/core/LICENSE','node_modules/@mozilla/readability/LICENSE.md','node_modules/pdfjs-dist/LICENSE','node_modules/lucide/LICENSE','node_modules/marked/LICENSE.md','node_modules/dompurify/LICENSE'];
+const licenseFiles = ['vendor/web/LICENSE','vendor/core/LICENSE','node_modules/@mozilla/readability/LICENSE.md','node_modules/pdfjs-dist/LICENSE','node_modules/pdfjs-dist/cmaps/LICENSE','node_modules/pdfjs-dist/standard_fonts/LICENSE_FOXIT','node_modules/pdfjs-dist/standard_fonts/LICENSE_LIBERATION','node_modules/lucide/LICENSE','node_modules/marked/LICENSE.md','node_modules/dompurify/LICENSE'];
 let notices = '# Third-party notices\n\nThis bundle includes unchanged public reading algorithms from Cozy Read Aloud Web; provenance is recorded in vendor/SOURCES.json.\n';
 for(const file of licenseFiles) { notices += `\n## ${file}\n\n` + await readFile(file,'utf8'); }
 await writeFile('dist/THIRD-PARTY-NOTICES.txt',notices);
