@@ -1,6 +1,6 @@
 {
   "name": "cozy-read-aloud-userscript",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "private": true,
   "type": "module",
   "scripts": {
@@ -8,6 +8,7 @@
     "test": "node --test test/*.test.mjs",
     "test:browser": "node scripts/browser-check.mjs",
     "test:api-browser": "node scripts/api-browser-check.mjs",
+    "test:csp-browser": "node scripts/csp-browser-check.mjs",
     "test:tampermonkey": "node scripts/tampermonkey-check.mjs",
     "start": "node scripts/serve.mjs"
   },

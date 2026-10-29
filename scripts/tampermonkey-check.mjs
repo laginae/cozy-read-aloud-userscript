@@ -40,7 +40,26 @@ try{
   await sample.screenshot({path:'output/tampermonkey-installed.png'});
   await frame.getByRole('button',{name:'关闭并停止',exact:true}).click();
   await sample.getByRole('button',{name:'打开 Cozy 朗读',exact:true}).waitFor();
-  await writeFile('output/tampermonkey-check.json',JSON.stringify({passed:true,extension:'Tampermonkey 5.5.1',browser:context.browser()?.version(),installedThroughUtilities:true,injectionByManager:true,webExtraction:true,mimoOptions:8,paidRequests:0,realSpeech:false},null,2));
-  console.log('Real Tampermonkey installation passed: script injection, webpage extraction, MiMo settings and close.');
+  const restricted=await context.newPage();
+  await restricted.route('https://cozy-csp-reading.test/',route=>route.fulfill({contentType:'text/html',headers:{'Content-Security-Policy':"default-src 'none'; script-src https://github.githubassets.com; style-src 'unsafe-inline'; frame-src https://viewscreen.githubusercontent.com"},body:'<!doctype html><html lang="en"><title>Public CSP sample</title><article><h1>Public compatibility sample</h1><p>A quiet garden welcomes visitors. This public paragraph verifies a local reading fallback on a restricted webpage.</p></article></html>'}));
+  await restricted.goto('https://cozy-csp-reading.test/');
+  await restricted.getByRole('button',{name:'打开 Cozy 朗读',exact:true}).click();
+  const compat=restricted.getByRole('region',{name:'兼容朗读面板'});
+  await compat.waitFor({timeout:15000});
+  assert.match(await compat.locator('.compat-preview').innerText(),/Public compatibility|quiet garden/);
+  assert.equal(await restricted.locator('iframe').count(),0);
+  assert.equal(await compat.locator('input[type=password],input[type=file]').count(),0);
+  await restricted.screenshot({path:'output/tampermonkey-csp.png'});
+  let liveGitHub=false;
+  if(process.env.LIVE_GITHUB_CHECK==='1'){
+    const github=await context.newPage();
+    await github.goto('https://github.com/laginae/cozy-read-aloud-userscript',{waitUntil:'domcontentloaded',timeout:45000});
+    await github.getByRole('button',{name:'打开 Cozy 朗读',exact:true}).click();
+    await github.getByRole('region',{name:'兼容朗读面板'}).waitFor({timeout:15000});
+    assert.ok((await github.locator('.compat-preview').innerText()).length>10);
+    await github.screenshot({path:'output/tampermonkey-github.png'});liveGitHub=true;
+  }
+  await writeFile('output/tampermonkey-check.json',JSON.stringify({passed:true,extension:'Tampermonkey 5.5.1',browser:context.browser()?.version(),installedThroughUtilities:true,injectionByManager:true,webExtraction:true,mimoOptions:8,strictCspFallback:true,liveGitHub,paidRequests:0,realSpeech:false},null,2));
+  console.log('Real Tampermonkey installation passed, including restrictive-CSP fallback. Live GitHub checked: '+liveGitHub);
   await writeFile('output/tampermonkey-extension.json',JSON.stringify({id,worker:worker.url()},null,2));
 }finally{await context.close();}

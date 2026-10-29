@@ -1,14 +1,13 @@
-# 0.2.0
+# 0.2.1
 
-First public GitHub release of the Cozy Read Aloud userscript.
+Fix reading on websites whose security policies block the isolated reader, including GitHub.
 
-- Read webpage articles, selections and imported local PDFs without Obsidian.
-- Optional OpenRouter voices with ElevenLabs presets and mandatory ZDR routing parameters.
-- Optional Xiaomi MiMo voices: 白桦, 苏打, 冰糖, 茉莉, Mia, Chloe, Milo and Dean, using separate credentials and consent. MiMo does not claim ZDR.
-- Session-only keys, bounded audio caching, request cancellation, scope limits and sanitized errors; no automatic retries or provider fallback.
-- Playback, outline, PDF selection/zoom, paragraph highlights and academic formula processing.
-- Bundled PDF runtime and assets, third-party notices, checksums and build provenance.
+- Switch to a local-voice compatibility panel if the isolated panel cannot start. Supports articles, selections, continuation, pause/resume, stop, jumps and speed.
+- Keep API keys and PDF files out of the host webpage: compatibility mode has no credential input, remote voices or file import. Normal isolated-panel OpenRouter/MiMo and PDF workflows are unchanged.
+- Keep site CSP and iframe sandbox protections intact; no new extension grants or privileged network bridge.
+- Add restrictive-CSP and Trusted Types regression checks, including a real Tampermonkey check on the public GitHub repository.
+- Sort bundled PDF resource names for matching Windows/Linux build output.
 
-Verification: 19 unit tests, Edge public webpage/PDF checks, mocked OpenRouter/MiMo audio flows, and actual Tampermonkey 5.5.1 installation/injection in isolated Chromium. No private text, API keys or paid API tests are included. Live API quality and mobile/background behavior remain unverified. Native browser PDF viewers require saving the file and importing it into the panel.
+Verification: 19 unit tests, Edge webpage/PDF and API mock tests, restrictive-policy compatibility tests, and actual Tampermonkey 5.5.1 on ordinary and GitHub pages in isolated Chromium. No private text, keys or paid API calls were used. Live voice quality and mobile/background behavior remain unverified.
 
-Install `cozy-read-aloud.user.js` through Tampermonkey Utilities, or extract the ZIP and open `demo.html` to try the standalone public sample. See the bilingual README before enabling online voices.
+Update by importing `cozy-read-aloud.user.js` through Tampermonkey Utilities, then refresh the webpage. Restricted sites use local voices only. Use the release ZIP's `demo.html` for the full isolated interface, including optional API voices and imported PDFs.

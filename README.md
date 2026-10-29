@@ -20,7 +20,9 @@ The release ZIP includes a standalone `demo.html` with public sample text. Extra
 - Optional academic processing skips complex formulas and retains suitable short variables. Highlighting is segment-based, not word-aligned.
 - Only currently loaded webpage content is read. The script does not expand chats, fetch subsequent pages, bypass logins or inspect cross-origin frames.
 
-Some sites block the isolated panel or speech requests through their security policies. Use the local demo or [Cozy Read Aloud Web](https://laginae.github.io/cozy-read-aloud-web/) when a site is incompatible. The current script interface is Chinese.
+**Restricted sites such as GitHub:** if the isolated panel cannot start, version 0.2.1 switches to a local-voice compatibility panel after about six seconds; some restrictions can be detected immediately. It supports articles, selections, continuation, pause/resume, stop, segment jumps and speed. No site security protection needs to be disabled.
+
+The compatibility panel belongs to the host DOM, so it deliberately has **no API-key fields, remote voices or PDF file input**. Use the release ZIP's local `demo.html` for the full script interface. [Cozy Read Aloud Web](https://laginae.github.io/cozy-read-aloud-web/) is another standalone option, with its own separately maintained voice options. The link opens that page without automatically transferring your current text. The current script interface is Chinese.
 
 ## Local PDFs
 
@@ -55,7 +57,7 @@ Limits: 30 MiB, 120 pages and one million extracted characters. Split larger fil
 
 ## Verification and Limits
 
-Version 0.2.0 passes 19 unit tests, public webpage/PDF browser checks, and both API flows with mocked audio. The script was also installed through actual Tampermonkey 5.5.1 in an isolated Chromium profile, checking manager-driven injection, extraction, MiMo settings and panel closure.
+Version 0.2.1 passes 19 unit tests, public webpage/PDF browser checks, and both API flows with mocked audio. Restrictive CSP and Trusted Types tests verify local-only compatibility playback, no credential/file inputs and no network requests. Actual Tampermonkey 5.5.1 in an isolated Chromium profile was used to check manager-driven injection, MiMo settings and the compatibility panel on this repository's live GitHub page.
 
 **No paid API account was used in these tests.** Live voice quality, Firefox/Safari, phones, lock-screen behavior and sustained background playback remain unverified. Narrow desktop layouts do not establish mobile compatibility. See [TESTING.md](TESTING.md).
 

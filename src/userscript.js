@@ -1,5 +1,6 @@
 import { createElement, Volume2 } from 'lucide';
 import { extract, captureSelection } from './extract.js';
+import { createCompatReader } from './compat-reader.js';
 
 if (window.top === window && !document.querySelector('[data-cozy-host]')) {
   const host = document.createElement('div');
@@ -13,7 +14,7 @@ if (window.top === window && !document.querySelector('[data-cozy-host]')) {
   launcher.append(createElement(Volume2));
   root.append(style, launcher);
   document.documentElement.append(host);
-  let frame, ready = false, pending, blocks = [], selected = null, highlightStyle, timeout;
+  let frame, compat, ready = false, pending, blocks = [], selected = null, highlightStyle, timeout;
   let scrollUntil = 0;
   const highlightName = 'cozy-' + crypto.getRandomValues(new Uint32Array(3)).join('');
   const remember = () => { const range = captureSelection(); if (range) selected = range; };
@@ -32,6 +33,7 @@ if (window.top === window && !document.querySelector('[data-cozy-host]')) {
   function show(mode) {
     remember();
     pending = mode;
+    if(compat){launcher.hidden=true;compat.open(mode);return;}
     if (!frame) {
       frame = document.createElement('iframe');
       frame.title = 'Cozy Read Aloud 阅读面板';
@@ -39,22 +41,44 @@ if (window.top === window && !document.querySelector('[data-cozy-host]')) {
       frame.setAttribute('sandbox', 'allow-scripts allow-popups allow-popups-to-escape-sandbox');
       frame.setAttribute('allow', 'autoplay');
       frame.referrerPolicy = 'no-referrer';
-      frame.srcdoc = __READER_HTML__;
+      try{frame.srcdoc = __READER_HTML__;}catch{openCompat();return;}
       root.append(frame);
+      const currentFrame=frame;
       timeout = setTimeout(() => {
-        if (ready) return;
-        frame.remove(); frame = null;
-        launcher.hidden = false;
-        const note = document.createElement('p');
-        note.className = 'failure';
-        note.textContent = '此网站的安全策略阻止了阅读面板。请在随附的 demo.html 或普通可信网页打开面板，再导入 PDF。';
-        root.append(note);
-        setTimeout(() => note.remove(), 15000);
+        if (ready || frame!==currentFrame) return;
+        openCompat();
       }, 6000);
     }
     frame.hidden = false;
     launcher.hidden = true;
     if (ready && mode) load(mode);
+  }
+  function openCompat(){
+    clearTimeout(timeout);frame?.remove();frame=null;ready=false;launcher.hidden=true;
+    compat ||= createCompatReader(root,{
+      read:mode=>{blocks=extract(mode,selected);return blocks;},
+      highlight:highlightBlock,clear,
+      close:()=>{launcher.hidden=false;clear();launcher.focus();},
+    });
+    compat.open(pending);
+  }
+  function highlightBlock(index,follow){
+    clear();const block=blocks[index];
+    if(!block?.el?.isConnected)return;
+    if(CSS.highlights && typeof Highlight!=='undefined'){
+      if(!highlightStyle){
+        highlightStyle=document.createElement('style');
+        highlightStyle.textContent=`::highlight(${highlightName}){background:#ffe3a0;color:inherit}`;
+        document.head.append(highlightStyle);
+      }
+      const range=block.range?.cloneRange()||document.createRange();
+      if(!block.range)range.selectNodeContents(block.el);
+      CSS.highlights.set(highlightName,new Highlight(range));
+    }
+    if(follow===true && Date.now()>=scrollUntil){
+      const rect=block.el.getBoundingClientRect();
+      if(rect.top<70||rect.bottom>innerHeight-100)block.el.scrollIntoView({block:'center',behavior:'smooth'});
+    }
   }
   launcher.addEventListener('pointerdown', remember);
   launcher.addEventListener('click', () => show(selected ? 'selected' : 'article'));
@@ -69,23 +93,7 @@ if (window.top === window && !document.querySelector('[data-cozy-host]')) {
     else if (data.type === 'expand') frame.classList.toggle('wide', data.value === true);
     else if (data.type === 'clear') clear();
     else if (data.type === 'highlight' && Number.isInteger(data.index) && blocks[data.index]) {
-      clear();
-      const block = blocks[data.index];
-      if (!block.el?.isConnected) return;
-      if (CSS.highlights && typeof Highlight !== 'undefined') {
-        if (!highlightStyle) {
-          highlightStyle = document.createElement('style');
-          highlightStyle.textContent = `::highlight(${highlightName}){background:#ffe3a0;color:inherit}`;
-          document.head.append(highlightStyle);
-        }
-        const range = block.range?.cloneRange() || document.createRange();
-        if (!block.range) range.selectNodeContents(block.el);
-        CSS.highlights.set(highlightName, new Highlight(range));
-      }
-      if (data.follow === true && Date.now() >= scrollUntil) {
-        const rect = block.el.getBoundingClientRect();
-        if (rect.top < 70 || rect.bottom > innerHeight - 100) block.el.scrollIntoView({ block: 'center', behavior: 'smooth' });
-      }
+      highlightBlock(data.index,data.follow);
     }
   });
   if (typeof GM_registerMenuCommand === 'function') {
@@ -94,5 +102,5 @@ if (window.top === window && !document.querySelector('[data-cozy-host]')) {
     GM_registerMenuCommand('Cozy：从选区继续', () => show('from'));
     GM_registerMenuCommand('Cozy：打开 PDF 阅读面板', () => show());
   }
-  window.addEventListener('pagehide', () => { clear(); frame?.remove(); });
+  window.addEventListener('pagehide', () => { clearTimeout(timeout);clear();compat?.dispose();frame?.remove(); });
 }

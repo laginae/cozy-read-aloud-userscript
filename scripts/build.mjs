@@ -12,7 +12,7 @@ for (const record of sources.files) {
 }
 const pdfAssets = {};
 for (const dir of ['cmaps','standard_fonts']) {
-  for (const file of await readdir(`node_modules/pdfjs-dist/${dir}`)) {
+  for (const file of (await readdir(`node_modules/pdfjs-dist/${dir}`)).sort()) {
     if (!/\.(bcmap|pfb|ttf)$/.test(file)) continue;
     pdfAssets[`${dir}/${file}`] = (await readFile(`node_modules/pdfjs-dist/${dir}/${file}`)).toString('base64');
   }
