@@ -1,0 +1,27 @@
+{
+  "name": "cozy-read-aloud-userscript",
+  "version": "0.2.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "test": "node --test test/*.test.mjs",
+    "test:browser": "node scripts/browser-check.mjs",
+    "test:api-browser": "node scripts/api-browser-check.mjs",
+    "test:tampermonkey": "node scripts/tampermonkey-check.mjs",
+    "start": "node scripts/serve.mjs"
+  },
+  "dependencies": {
+    "@mozilla/readability": "0.6.0",
+    "@laginae/note-reader-core": "file:vendor/core",
+    "dompurify": "3.4.17",
+    "lucide": "1.8.0",
+    "marked": "17.0.5",
+    "pdfjs-dist": "6.4.299"
+  },
+  "devDependencies": {
+    "esbuild": "0.25.10",
+    "pdf-lib": "1.17.1",
+    "playwright": "1.62.1"
+  }
+}

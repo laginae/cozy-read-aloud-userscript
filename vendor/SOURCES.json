@@ -1,0 +1,166 @@
+{
+  "repository": "https://github.com/laginae/cozy-read-aloud-web",
+  "commit": "2004919373b3d47070d935c16b759cd741e9cce1",
+  "files": [
+    {
+      "source": "LICENSE",
+      "target": "vendor/web/LICENSE",
+      "sha256": "fad641e3e8feeeeff67663ca601835fd1147d329b349ced912ad39990872cad8"
+    },
+    {
+      "source": "public/assets/cozy-cat.png",
+      "target": "vendor/web/public/assets/cozy-cat.png",
+      "sha256": "2e4514fa8c3eb3b23b234d37012cb70c8fcb73faf85277c63103f6720d582f62"
+    },
+    {
+      "source": "public/pdf-text-layer.css",
+      "target": "vendor/web/public/pdf-text-layer.css",
+      "sha256": "bc38b8a1b9c988742ab64c7486ec9199ecf77301f4da2be08e406dd0e0b3e7dd"
+    },
+    {
+      "source": "src/documents.js",
+      "target": "vendor/web/src/documents.js",
+      "sha256": "bbc0c7264b90106331f209475c2616d1c9dae6fda8afb52e309c92a0a996c85d"
+    },
+    {
+      "source": "src/follow.js",
+      "target": "vendor/web/src/follow.js",
+      "sha256": "b4fddea9f467d5c1131f9664740eda35717734115adc83e2819977f45d24a245"
+    },
+    {
+      "source": "src/import-lifecycle.js",
+      "target": "vendor/web/src/import-lifecycle.js",
+      "sha256": "b09fdefc7258c510f71db8ddcc2bc39b37b3560898f1afbaca1f14a4f27f22b2"
+    },
+    {
+      "source": "src/pdf-selection.js",
+      "target": "vendor/web/src/pdf-selection.js",
+      "sha256": "865e07e24b015c48ff27c3ad7f74ec5949e7ca4b5785c5fdbbe6608ceabc3ee5"
+    },
+    {
+      "source": "src/speech-queue.js",
+      "target": "vendor/web/src/speech-queue.js",
+      "sha256": "8fa4a82ad87896adc5282cb09ccdeab49f8541ff4e55ee4614c74ebb29a34147"
+    },
+    {
+      "source": "vendor/core/LICENSE",
+      "target": "vendor/core/LICENSE",
+      "sha256": "a9d2578d42f61df71a23238c9d2526fda8634a0bfed6bf08580de5a7f87edbbb"
+    },
+    {
+      "source": "vendor/core/index.js",
+      "target": "vendor/core/index.js",
+      "sha256": "829402b6a66e705312e474e7880faefe2e8f9b383571d880ffdf7db448605a28"
+    },
+    {
+      "source": "vendor/core/package.json",
+      "target": "vendor/core/package.json",
+      "sha256": "858a287b28e0948326ceaf0cdd205c28478bd79aa8c52d4bdf442b2d22a4efad"
+    },
+    {
+      "source": "vendor/core/src/academic-speech.js",
+      "target": "vendor/core/src/academic-speech.js",
+      "sha256": "eaaadfe925a6781145bf8ac0849854e1e3ac563660f065ea9d618c81f30569e6"
+    },
+    {
+      "source": "vendor/core/src/pdf-layout.js",
+      "target": "vendor/core/src/pdf-layout.js",
+      "sha256": "f764d8f6696dabcdb58ea1ff5dd16ccefb25121c0840ba3b1a7a2e95fbe40c66"
+    },
+    {
+      "source": "vendor/core/src/playback-queue.js",
+      "target": "vendor/core/src/playback-queue.js",
+      "sha256": "72da68a951f25d8f55ff0e8ae5c2b59075a242c5af80e772525f48a281274e03"
+    },
+    {
+      "source": "vendor/core/src/reading-position.js",
+      "target": "vendor/core/src/reading-position.js",
+      "sha256": "dc76c7fef8d1043ee9984caffaeb29a1c18431655daf490888897a98e97992d3"
+    },
+    {
+      "source": "vendor/core/src/semantic-chunker.js",
+      "target": "vendor/core/src/semantic-chunker.js",
+      "sha256": "9cceab68fbc2f4423fae0e39a97ebe76f81d929080dc87f52b68e5f412e9286c"
+    },
+    {
+      "source": "vendor/core/src/task-state.js",
+      "target": "vendor/core/src/task-state.js",
+      "sha256": "803197719eaa48695c33c1f1c6ec992297d26906e1bc56ef309afd2c6526a9f8"
+    },
+    {
+      "source": "vendor/core/src/text-cleaning.js",
+      "target": "vendor/core/src/text-cleaning.js",
+      "sha256": "12517800d5710267e2476750d6a931320159dc0c3ddbd51c3004fdd54d796235"
+    },
+    {
+      "source": "vendor/core/test/pdf-golden-fixtures.cjs",
+      "target": "vendor/core/test/pdf-golden-fixtures.cjs",
+      "sha256": "c088a29a7f3cb65e3d9f7b129e43b0e1cead2a9e73234aa748741e9e1730a79a"
+    },
+    {
+      "source": "vendor/mobile/LICENSE",
+      "target": "vendor/mobile/LICENSE",
+      "sha256": "a9d2578d42f61df71a23238c9d2526fda8634a0bfed6bf08580de5a7f87edbbb"
+    },
+    {
+      "source": "vendor/mobile/package.json",
+      "target": "vendor/mobile/package.json",
+      "sha256": "dbf8353f77358bc12169b7bb7301e1978d5b503e002ee927229a8993672818fc"
+    },
+    {
+      "source": "vendor/mobile/pdf-footnotes.js",
+      "target": "vendor/mobile/pdf-footnotes.js",
+      "sha256": "cd7ef93846f45e7a70490c01078f2e22d309724bda053dcbbea0222844e503dd"
+    },
+    {
+      "source": "vendor/mobile/pdf-headers.js",
+      "target": "vendor/mobile/pdf-headers.js",
+      "sha256": "75d08ddc12846333143c3888925033b18f43a8b8495abe8fef0b67ac8332bea0"
+    },
+    {
+      "source": "vendor/mobile/pdf-speech.js",
+      "target": "vendor/mobile/pdf-speech.js",
+      "sha256": "0c4888102b7ba7e3779a2bcf40048b8e2ee9aca049b05509a611f1abdae73e9b"
+    },
+    {
+      "source": "vendor/mobile/pdf-speech/academic-speech.js",
+      "target": "vendor/mobile/pdf-speech/academic-speech.js",
+      "sha256": "1a445ed84cbc852ea1ed78dc8d28a141c47cb0113d9d08306b6c14ed534e08b3"
+    },
+    {
+      "source": "vendor/mobile/pdf-speech/math-functions.js",
+      "target": "vendor/mobile/pdf-speech/math-functions.js",
+      "sha256": "cddf4609659bc64028681446e650d8ca2f2fa3c9c513922c9c2b2a3a883f68db"
+    },
+    {
+      "source": "vendor/mobile/pdf-speech/math-symbols.js",
+      "target": "vendor/mobile/pdf-speech/math-symbols.js",
+      "sha256": "c3eeeca5097acbff11f1cacf5e5d007882f01ad527ae6616e4df981763ed4d3c"
+    },
+    {
+      "source": "vendor/mobile/pdf-speech/pdf-math.js",
+      "target": "vendor/mobile/pdf-speech/pdf-math.js",
+      "sha256": "65520581f67a386cee660d934f7396f35dfa0d963fa41d84d6a45efa4482982f"
+    },
+    {
+      "source": "vendor/mobile/pdf-speech/structured-math.js",
+      "target": "vendor/mobile/pdf-speech/structured-math.js",
+      "sha256": "ca3fd95eb95a4e9bd22a7fe8e5039344fc3d47ff77b82dd448c6fbd2de928c36"
+    },
+    {
+      "source": "vendor/mobile/preparation-pool.js",
+      "target": "vendor/mobile/preparation-pool.js",
+      "sha256": "4f7b7b73d9b18b0795fdf045379213199b9f12203d2b58945a68c9cd570f3d1c"
+    },
+    {
+      "source": "vendor/mobile/sentence-chunker.js",
+      "target": "vendor/mobile/sentence-chunker.js",
+      "sha256": "86e567b345b01e9ef741f3aea9a1dd1f8ba4fe249ec2dc5d33d200828614e766"
+    },
+    {
+      "source": "vendor/mobile/speech-text.js",
+      "target": "vendor/mobile/speech-text.js",
+      "sha256": "4dfd20787d709be38a4129d3d29a2bbb9521ed9391e3f1bffe3b90281199f858"
+    }
+  ]
+}

@@ -1,0 +1,77 @@
+name: Verify and release
+
+on:
+  push:
+    branches: [main]
+    tags: ['v*']
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: '24.15.0'
+      - run: npm ci --ignore-scripts
+      - run: npm test
+      - run: npm run build
+      - run: npx playwright install --with-deps chromium
+      - name: Public fixture browser checks
+        env:
+          BROWSER_CHANNEL: chromium
+        run: |
+          node scripts/serve.mjs > preview.log 2>&1 &
+          PREVIEW_PID=$!
+          trap 'kill "$PREVIEW_PID"' EXIT
+          for n in $(seq 1 30); do
+            if curl --silent --fail http://127.0.0.1:5199/ > /dev/null; then break; fi
+            sleep 1
+          done
+          npm run test:browser
+          npm run test:api-browser
+
+  release:
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: verify
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: write
+      id-token: write
+      attestations: write
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: '24.15.0'
+      - name: Check version
+        run: node --input-type=module -e "import fs from 'node:fs'; if(process.env.GITHUB_REF_NAME!=='v'+JSON.parse(fs.readFileSync('package.json')).version)process.exit(1)"
+      - run: npm ci --ignore-scripts
+      - run: npm run build
+      - name: Package public release files
+        working-directory: dist
+        run: |
+          zip cozy-read-aloud-userscript.zip cozy-read-aloud.user.js demo.html README.md README.zh-CN.md TESTING.md RELEASE_NOTES.md LICENSE THIRD-PARTY-NOTICES.txt
+          sha256sum cozy-read-aloud.user.js cozy-read-aloud-userscript.zip > SHA256SUMS.txt
+      - name: Attest build
+        uses: actions/attest-build-provenance@43d14bc2b83dec42d39ecae14e916627a18bb661
+        with:
+          subject-path: |
+            dist/cozy-read-aloud.user.js
+            dist/cozy-read-aloud-userscript.zip
+      - name: Publish release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: |
+          gh release create "$RELEASE_TAG" --verify-tag --title "Cozy Read Aloud Userscript $RELEASE_TAG" --notes-file RELEASE_NOTES.md dist/cozy-read-aloud.user.js dist/cozy-read-aloud-userscript.zip dist/SHA256SUMS.txt dist/THIRD-PARTY-NOTICES.txt

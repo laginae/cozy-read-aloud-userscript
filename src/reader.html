@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline' blob:; worker-src blob:; style-src 'unsafe-inline'; img-src data: blob:; font-src data: blob:; media-src blob:; connect-src https://openrouter.ai/api/v1/audio/speech https://api.xiaomimimo.com/v1/chat/completions; base-uri 'none'; form-action 'none'">
+<title>Cozy Read Aloud</title><style>__CSS__</style></head><body>
+<header><img src="__LOGO__" width="34" height="34" alt=""><strong>Cozy Read Aloud</strong><button id="expand" class="icon" title="展开阅读面板" aria-label="展开阅读面板"><i data-lucide="maximize-2"></i></button><button id="close" class="icon" title="关闭并停止" aria-label="关闭并停止"><i data-lucide="x"></i></button></header>
+<nav class="sources" aria-label="朗读来源"><button id="article"><i data-lucide="file-text"></i>网页正文</button><button id="web-selected"><i data-lucide="text-select"></i>网页选区</button><button id="web-from"><i data-lucide="list-start"></i>从选区继续</button><button id="open-pdf"><i data-lucide="folder-open"></i>打开 PDF</button><input id="pdf-file" type="file" accept=".pdf,application/pdf" hidden></nav>
+<div id="notice" role="status" hidden></div>
+<section class="controls" aria-label="播放控制">
+<div class="row"><select id="scope" aria-label="朗读范围"><option value="all">全文朗读</option><option value="selected">只读面板选区</option><option value="from">从面板选区继续</option></select><select id="rate" aria-label="倍速"><option value="0.75">0.75x</option><option value="1" selected>1x</option><option value="1.25">1.25x</option><option value="1.5">1.5x</option><option value="1.75">1.75x</option><option value="2">2x</option></select><button id="settings-toggle" class="icon" aria-label="语音设置" title="语音设置" aria-expanded="false"><i data-lucide="settings-2"></i></button></div>
+<div class="row transport"><button id="previous" class="icon" aria-label="上一段" title="上一段"><i data-lucide="skip-back"></i></button><button id="play" class="icon primary" aria-label="播放" title="播放"><i data-lucide="play"></i></button><button id="stop" class="icon" aria-label="停止" title="停止"><i data-lucide="square"></i></button><button id="next" class="icon" aria-label="下一段" title="下一段"><i data-lucide="skip-forward"></i></button><span id="status" role="status">已就绪</span><button id="outline-toggle" class="icon" aria-label="文档大纲" title="文档大纲" aria-expanded="false"><i data-lucide="list-tree"></i></button></div>
+<input id="progress" type="range" min="0" max="1" value="0" disabled aria-label="分段进度">
+<div id="settings" hidden>
+<label>语音引擎<select id="engine"><option value="system">浏览器 / 系统语音</option><option value="openrouter">OpenRouter API（可选、可能收费）</option><option value="mimo">小米 MiMo API（可选）</option></select></label>
+<div id="system-options"><label>音色<select id="voice" aria-label="音色"></select></label><label><input id="remote-voices" type="checkbox">允许浏览器联网音色（可能向语音提供方发送朗读文字）</label></div>
+<div id="api-options" hidden>
+<label>OpenRouter 会话密钥<input id="api-key" type="password" autocomplete="off" spellcheck="false" maxlength="512" placeholder="关闭面板后清除，不保存"></label>
+<label>模型<select id="api-preset"><option value="elevenlabs/eleven-multilingual-v2">ElevenLabs Multilingual v2</option><option value="elevenlabs/eleven-flash-v2.5">ElevenLabs Flash v2.5</option><option value="custom">自定义 OpenRouter 模型</option></select></label>
+<label id="custom-model" hidden>模型 ID<input id="api-model" type="text" maxlength="160" spellcheck="false" value="elevenlabs/eleven-multilingual-v2"></label>
+<label>音色 ID<input id="api-voice" type="text" maxlength="160" value="sarah" spellcheck="false"></label>
+<label><input id="api-consent" type="checkbox">允许将当前朗读范围的文字发送到 OpenRouter 及所选提供方，可能收费；请求强制 ZDR。</label>
+<button id="clear-key" type="button"><i data-lucide="trash-2"></i>清除密钥与音频缓存</button>
+<a href="https://openrouter.ai/docs/guides/features/zdr" target="_blank" rel="noreferrer noopener">服务方隐私政策</a>
+</div>
+<div id="mimo-options" hidden>
+<label>MiMo 会话密钥<input id="mimo-key" type="password" autocomplete="off" spellcheck="false" maxlength="512" placeholder="关闭面板后清除，不保存"></label>
+<label>MiMo 音色<select id="mimo-voice"><option value="白桦">白桦 · 中文男声</option><option value="苏打">苏打 · 中文男声</option><option value="冰糖">冰糖 · 中文女声</option><option value="茉莉">茉莉 · 中文女声</option><option value="Mia">Mia · 英文女声</option><option value="Chloe">Chloe · 英文女声</option><option value="Milo">Milo · 英文男声</option><option value="Dean">Dean · 英文男声</option></select></label>
+<label><input id="mimo-consent" type="checkbox">允许将当前朗读范围的文字发送到小米 MiMo；不承诺 ZDR，费用及留存以服务方政策为准。</label>
+<button id="clear-mimo" type="button"><i data-lucide="trash-2"></i>清除密钥与音频缓存</button>
+<a href="https://privacy.mi.com/XiaomiMiMoPlatform/zh_CN/" target="_blank" rel="noreferrer noopener">小米 MiMo 隐私政策</a>
+</div>
+<label><input id="follow" type="checkbox" checked>自动跟随</label><label><input id="academic" type="checkbox" checked>学术模式（略过复杂公式）</label></div>
+</section>
+<nav id="outline" aria-label="文档大纲" hidden></nav>
+<div id="pdf-tools" hidden><button id="zoom-out" class="icon" title="缩小 PDF" aria-label="缩小 PDF"><i data-lucide="zoom-out"></i></button><span id="zoom-label">100%</span><button id="zoom-in" class="icon" title="放大 PDF" aria-label="放大 PDF"><i data-lucide="zoom-in"></i></button><button id="zoom-fit" title="适合宽度">适合宽度</button></div>
+<main id="reader" tabindex="0" aria-label="阅读内容"><div class="empty"><i data-lucide="headphones"></i><p>尚未载入文档</p></div></main>
+<footer><span id="title">浏览器语音</span><span id="count"></span></footer>
+<script>__JS__</script></body></html>
