@@ -27,7 +27,7 @@ if (window.top === window && !document.querySelector('[data-cozy-host]')) {
     clear();
     try {
       blocks = extract(mode, selected);
-      post({ type: 'document', title: document.title || '网页', blocks: blocks.map((b, index) => ({ text: b.text, source: index, heading: b.heading })) });
+      post({ type: 'document', title: document.title || '网页', blocks: blocks.map((b, index) => ({ text: b.text, source: index, heading: b.heading, ...(b.table ? { table: b.table } : {}) })) });
     } catch (error) { post({ type: 'error', message: error.message }); }
   }
   function show(mode) {

@@ -1,6 +1,6 @@
 {
   "repository": "https://github.com/laginae/cozy-read-aloud-web",
-  "commit": "2004919373b3d47070d935c16b759cd741e9cce1",
+  "commit": "7018ce4bfd9dfae8a6f68e0c2dc311c390b98514",
   "files": [
     {
       "source": "LICENSE",
@@ -20,7 +20,7 @@
     {
       "source": "src/documents.js",
       "target": "vendor/web/src/documents.js",
-      "sha256": "bbc0c7264b90106331f209475c2616d1c9dae6fda8afb52e309c92a0a996c85d"
+      "sha256": "1ec536f2eb7785d92869cb041a82a502beeed7a8b879d43107f803e2fc216183"
     },
     {
       "source": "src/follow.js",
@@ -40,7 +40,12 @@
     {
       "source": "src/speech-queue.js",
       "target": "vendor/web/src/speech-queue.js",
-      "sha256": "8fa4a82ad87896adc5282cb09ccdeab49f8541ff4e55ee4614c74ebb29a34147"
+      "sha256": "b6454d1ac99b50185f75434e3c563577849c39cd7d5467d2a6511346e9e2ce53"
+    },
+    {
+      "source": "src/table-data.js",
+      "target": "vendor/web/src/table-data.js",
+      "sha256": "174116fc0749b3c41cc800e637a4a8c1b68155f373b9b60503586b2bc8e32483"
     },
     {
       "source": "vendor/core/LICENSE",
@@ -55,12 +60,37 @@
     {
       "source": "vendor/core/package.json",
       "target": "vendor/core/package.json",
-      "sha256": "858a287b28e0948326ceaf0cdd205c28478bd79aa8c52d4bdf442b2d22a4efad"
+      "sha256": "dcb89f1e583a8e6011d7567753a64d6dbc210dd1aa3da62b1f7a0527139bc288"
     },
     {
       "source": "vendor/core/src/academic-speech.js",
       "target": "vendor/core/src/academic-speech.js",
-      "sha256": "eaaadfe925a6781145bf8ac0849854e1e3ac563660f065ea9d618c81f30569e6"
+      "sha256": "d7b64609a008862e381feacf99c9a615a42eb4d5e49f368629104236c7600790"
+    },
+    {
+      "source": "vendor/core/src/math-collections.js",
+      "target": "vendor/core/src/math-collections.js",
+      "sha256": "ae83448da7be59f1c68258a7a3b915c14167fb70200801b8a01adba8f0285865"
+    },
+    {
+      "source": "vendor/core/src/math-fractions.js",
+      "target": "vendor/core/src/math-fractions.js",
+      "sha256": "7cf748d297ce531f013b2b08b486f3bd5bfaabcd5b4bdb0364648e14b4d415bb"
+    },
+    {
+      "source": "vendor/core/src/math-functions.js",
+      "target": "vendor/core/src/math-functions.js",
+      "sha256": "b8efcb934e0e2b7cb807cfb93b43a6ada628598231390045c71da6a4b1d62307"
+    },
+    {
+      "source": "vendor/core/src/math-symbols.js",
+      "target": "vendor/core/src/math-symbols.js",
+      "sha256": "c3eeeca5097acbff11f1cacf5e5d007882f01ad527ae6616e4df981763ed4d3c"
+    },
+    {
+      "source": "vendor/core/src/math-variable-labels.js",
+      "target": "vendor/core/src/math-variable-labels.js",
+      "sha256": "fbbbc76f71eccc7b964dfb9f7ebd255f84028293e13e1b436abf815591cb9b83"
     },
     {
       "source": "vendor/core/src/pdf-layout.js",
@@ -83,6 +113,11 @@
       "sha256": "9cceab68fbc2f4423fae0e39a97ebe76f81d929080dc87f52b68e5f412e9286c"
     },
     {
+      "source": "vendor/core/src/structured-math.js",
+      "target": "vendor/core/src/structured-math.js",
+      "sha256": "ca3fd95eb95a4e9bd22a7fe8e5039344fc3d47ff77b82dd448c6fbd2de928c36"
+    },
+    {
       "source": "vendor/core/src/task-state.js",
       "target": "vendor/core/src/task-state.js",
       "sha256": "803197719eaa48695c33c1f1c6ec992297d26906e1bc56ef309afd2c6526a9f8"
@@ -90,7 +125,12 @@
     {
       "source": "vendor/core/src/text-cleaning.js",
       "target": "vendor/core/src/text-cleaning.js",
-      "sha256": "12517800d5710267e2476750d6a931320159dc0c3ddbd51c3004fdd54d796235"
+      "sha256": "3c3e917fb0737d7af605703ee461e15f091c63ed662a2f8996098edcbb0f3e13"
+    },
+    {
+      "source": "vendor/core/test/math-golden-fixtures.cjs",
+      "target": "vendor/core/test/math-golden-fixtures.cjs",
+      "sha256": "2a881c088b8c59fdfd637bc9af9f5c2f599224df8581a1ad73c99b88ee92d6a2"
     },
     {
       "source": "vendor/core/test/pdf-golden-fixtures.cjs",
@@ -125,27 +165,42 @@
     {
       "source": "vendor/mobile/pdf-speech/academic-speech.js",
       "target": "vendor/mobile/pdf-speech/academic-speech.js",
-      "sha256": "1a445ed84cbc852ea1ed78dc8d28a141c47cb0113d9d08306b6c14ed534e08b3"
+      "sha256": "5dd71928ee8f618a5d7f817bc9d913d782e13c138f94d1f27ea3e95b96ee37aa"
+    },
+    {
+      "source": "vendor/mobile/pdf-speech/math-collections.js",
+      "target": "vendor/mobile/pdf-speech/math-collections.js",
+      "sha256": "4701a9a993b1b24a5f80c08eed94323c2ba944ce9e595da5ea42b3e8e2df2ead"
+    },
+    {
+      "source": "vendor/mobile/pdf-speech/math-fractions.js",
+      "target": "vendor/mobile/pdf-speech/math-fractions.js",
+      "sha256": "fdedf32227de39e4f8cd2594fd75a510faa18e67ff2d0055e8f2d5ae631e2c8a"
     },
     {
       "source": "vendor/mobile/pdf-speech/math-functions.js",
       "target": "vendor/mobile/pdf-speech/math-functions.js",
-      "sha256": "cddf4609659bc64028681446e650d8ca2f2fa3c9c513922c9c2b2a3a883f68db"
+      "sha256": "94b284db90b6800e6fbfdc9e6edfb1deceba5927ebcaaf33801a1523ecfbc08b"
     },
     {
       "source": "vendor/mobile/pdf-speech/math-symbols.js",
       "target": "vendor/mobile/pdf-speech/math-symbols.js",
-      "sha256": "c3eeeca5097acbff11f1cacf5e5d007882f01ad527ae6616e4df981763ed4d3c"
+      "sha256": "5cb2c0c661cbf66e6d3af2f76a12f06d696eac8a20d01d3cdab0cbcdde9b980d"
+    },
+    {
+      "source": "vendor/mobile/pdf-speech/math-variable-labels.js",
+      "target": "vendor/mobile/pdf-speech/math-variable-labels.js",
+      "sha256": "eb87750fc3b83c236b0d661cd7ac56b9a59ce86338dee5711f9f34e929b7913a"
     },
     {
       "source": "vendor/mobile/pdf-speech/pdf-math.js",
       "target": "vendor/mobile/pdf-speech/pdf-math.js",
-      "sha256": "65520581f67a386cee660d934f7396f35dfa0d963fa41d84d6a45efa4482982f"
+      "sha256": "c3ddb75d68c5a54ee6b6f18c051a26b5a45ad8bfffe4783540d473a8e36e4145"
     },
     {
       "source": "vendor/mobile/pdf-speech/structured-math.js",
       "target": "vendor/mobile/pdf-speech/structured-math.js",
-      "sha256": "ca3fd95eb95a4e9bd22a7fe8e5039344fc3d47ff77b82dd448c6fbd2de928c36"
+      "sha256": "1bbad0109328b453c2dc9c828b07b4ca2ec0611a644facd21218f0f741e5ffd2"
     },
     {
       "source": "vendor/mobile/preparation-pool.js",

@@ -4,11 +4,12 @@ import { capturePdfSelection } from '../vendor/web/src/pdf-selection.js';
 import { SpeechPlayer } from './speech.js';
 import { ApiPlayer } from './api-player.js';
 import chunker from '../vendor/mobile/sentence-chunker.js';
+import { normalizeTableData } from '../vendor/web/src/table-data.js';
 const icons = { Maximize2, Minimize2, X, FileText, TextSelect, ListStart, FolderOpen, Settings2, SkipBack, Play, Pause, Square, SkipForward, ListTree, Headphones, ZoomIn, ZoomOut, Trash2 };
 const $ = id => document.getElementById(id);
 const refresh = () => createIcons({ icons, attrs: { 'aria-hidden': 'true' } });
 const post = data => parent.postMessage({ cozy: true, ...data }, '*');
-const settings = { academic: true, mathMode: 'smart', mathLanguage: 'auto', skipHeaders: true, footnoteMode: 'body' };
+const settings = { academic: true, mathMode: 'smart', mathLanguage: 'auto', skipHeaders: true, footnoteMode: 'body', tableMode: 'smart', academicTableRepeatHeaders: true };
 let doc = null, snapshot = null, loading = null, expanded = false, suspendedUntil = 0, sourceKind = '', currentItem = null;
 let player, requestedDocument = true;
 const notify = text => { $('notice').textContent = text; $('notice').hidden = !text; };
@@ -144,6 +145,8 @@ $('progress').onchange = () => player.seek(Number($('progress').value));
 $('rate').onchange = () => { if(player===apiPlayer)apiPlayer.updateRate();else if (player.state === 'playing' || player.state === 'paused') notify('新倍速从下一段开始生效。'); };
 $('scope').onchange = () => player.stop();
 $('academic').onchange = () => { settings.academic = $('academic').checked; player.stop(); };
+$('table-mode').onchange = () => { settings.tableMode = $('table-mode').value; player.stop(); };
+$('table-repeat-headers').onchange = () => { settings.academicTableRepeatHeaders = $('table-repeat-headers').checked; player.stop(); };
 $('remote-voices').onchange = () => { player.stop(); updateVoices(); };
 $('voice').onchange = () => player.stop();
 function selectEngine() {
@@ -205,7 +208,8 @@ addEventListener('message', event => {
   const root = document.createElement('article'); root.className='prose';
   const blocks = data.blocks.map(b => {
     const el = document.createElement(b.heading ? 'h2' : 'p'); el.className='read-block'; el.textContent=b.text; root.append(el);
-    return {raw:b.text,el,source:b.source,kind:'text'};
+    const table = normalizeTableData(b.table);
+    return {raw:b.text,el,source:b.source,kind:table?'table':'text',...(table?{table}:{})};
   });
   showDocument({kind:'web', name:String(data.title||'网页').slice(0,300), root, blocks,
     outline:blocks.flatMap((b,i)=>data.blocks[i].heading?[{title:b.raw,level:1,el:b.el,block:i}]:[]), dispose(){root.remove();}}, 'web');

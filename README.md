@@ -15,6 +15,7 @@ The release ZIP includes a standalone `demo.html` with public sample text. Extra
 
 ## Reading Controls
 
+- **0.2.2 tables:** **Repeat table headers for each row** is on by default in both isolated and compatibility settings. Turn it off to read headings once, then row values. Recognized article/Markdown/HTML tables share Core 0.3.1; Smart / All / Skip policy remains independent. Partial selections and uncertain PDF layouts are not expanded.
 - Read an article, just the selection, or continue from the selected position.
 - Pause/resume, stop, jump between segments, adjust speed, navigate an outline and follow paragraph highlights.
 - Optional academic processing skips complex formulas and retains suitable short variables. Highlighting is segment-based, not word-aligned.

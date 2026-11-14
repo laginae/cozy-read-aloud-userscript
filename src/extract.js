@@ -1,7 +1,8 @@
 import { Readability } from '@mozilla/readability';
+import { readTableData } from '../vendor/web/src/table-data.js';
 
 const excluded = 'script,style,noscript,template,iframe,object,embed,svg,canvas,input,textarea,select,button,[contenteditable="true"],[contenteditable=""],[role="textbox"],[hidden],[aria-hidden="true"],[data-cozy-host]';
-const blockTags = 'p,h1,h2,h3,h4,h5,h6,li,blockquote,pre,td,th,div,section,article';
+const blockTags = 'p,h1,h2,h3,h4,h5,h6,li,blockquote,pre,td,th,div,section,article,table';
 function visible(el) {
   if (el.closest(excluded)) return false;
   const css = getComputedStyle(el);
@@ -60,7 +61,9 @@ export function extract(mode, selection) {
   }
   const startElement = selection?.startContainer.nodeType === 1 ? selection.startContainer : selection?.startContainer.parentElement;
   const fromRoot = startElement?.closest('article,main,[role="main"]');
-  const candidates = elements.filter(el => (mode !== 'article' || allowed.has(el)) && (mode !== 'from' || !fromRoot || fromRoot.contains(el)) && ![...el.querySelectorAll(blockTags)].some(child => elementSet.has(child) && (mode !== 'article' || allowed.has(child))));
+  const tables = new Map(mode === 'article' ? elements.filter(el => el.tagName === 'TABLE')
+    .map(el => [el, readTableData(el, { readText: visibleText, isVisible: visible })]).filter(([el, table]) => table && (allowed.has(el) || [...allowed].some(child => el.contains(child)))) : []);
+  const candidates = elements.filter(el => tables.has(el) || (!tables.has(el.closest('table')) && (mode !== 'article' || allowed.has(el)) && (mode !== 'from' || !fromRoot || fromRoot.contains(el)) && ![...el.querySelectorAll(blockTags)].some(child => elementSet.has(child) && (mode !== 'article' || allowed.has(child)))));
   const blocks = [];
   let reached = false;
   for (const el of candidates) {
@@ -74,7 +77,9 @@ export function extract(mode, selection) {
       ({ text: value, range } = rangePart(el, selection, mode === 'from'));
     }
     if (!value) continue;
-    blocks.push({ text: value, el, range, heading: /^H[1-6]$/.test(el.tagName) });
+    const table = tables.get(el);
+    if (table) value = [table.caption, table.headers.join('; '), ...table.rows.map(row => row.join('; '))].filter(Boolean).join('\n');
+    blocks.push({ text: value, el, range, heading: /^H[1-6]$/.test(el.tagName), ...(table ? { table } : {}) });
   }
   if (!blocks.length && mode === 'selected') {
     const ancestor = selection.commonAncestorContainer.nodeType === 1 ? selection.commonAncestorContainer : selection.commonAncestorContainer.parentElement;

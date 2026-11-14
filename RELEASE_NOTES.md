@@ -1,4 +1,13 @@
-# 0.2.1
+# 0.2.2
+
+- Add a default-on "Repeat table headers for each row" control in both the isolated reader and local-voice compatibility panel. Turn it off to announce simple webpage table headers once, followed by row values.
+- Keep smart/all/skip table policy independent. Preserve blank-cell positions and zero values; do not infer headers for nested/merged tables, partial selections or PDF text.
+- Synchronize the portable core to 0.3.1 and pin the public web source snapshot. Existing CSP, credential isolation and explicit API consent protections remain unchanged.
+- No private notes, documents, credentials or paid synthesis requests are used in the automated checks.
+
+Import the new userscript from Releases and refresh the webpage. Existing settings and API workflows are not automatically changed.
+
+## 0.2.1
 
 Fix reading on websites whose security policies block the isolated reader, including GitHub.
 

@@ -1,6 +1,6 @@
 {
   "name": "cozy-read-aloud-userscript",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "private": true,
   "type": "module",
   "scripts": {
@@ -9,12 +9,13 @@
     "test:browser": "node scripts/browser-check.mjs",
     "test:api-browser": "node scripts/api-browser-check.mjs",
     "test:csp-browser": "node scripts/csp-browser-check.mjs",
+    "test:table-browser": "node scripts/table-browser-check.mjs",
     "test:tampermonkey": "node scripts/tampermonkey-check.mjs",
     "start": "node scripts/serve.mjs"
   },
   "dependencies": {
-    "@mozilla/readability": "0.6.0",
     "@laginae/note-reader-core": "file:vendor/core",
+    "@mozilla/readability": "0.6.0",
     "dompurify": "3.4.17",
     "lucide": "1.8.0",
     "marked": "17.0.5",

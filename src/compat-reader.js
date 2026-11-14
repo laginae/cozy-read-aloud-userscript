@@ -2,6 +2,7 @@ import { createElement, Play, Pause, Square, SkipBack, SkipForward, X, FileText,
 import { SpeechPlayer } from './speech.js';
 import chunker from '../vendor/mobile/sentence-chunker.js';
 import speechText from '../vendor/mobile/speech-text.js';
+import core from '@laginae/note-reader-core';
 
 // This panel belongs to the host DOM: it must never collect keys or import files.
 export function createCompatReader(root, { read, highlight, clear, close }) {
@@ -38,9 +39,14 @@ export function createCompatReader(root, { read, highlight, clear, close }) {
   const preview=element('div',panel);preview.className='compat-preview';
   const voiceLabel=element('label',panel,'本机音色');const voice=element('select',voiceLabel);voice.ariaLabel='本机音色';
   const rateLabel=element('label',panel,'倍速');const rate=element('select',rateLabel);rate.ariaLabel='倍速';rate.title='新倍速从下一段生效';
+  const tableLabel=element('label',panel,'表格朗读策略'),tableMode=element('select',tableLabel);
+  for(const [value,title]of [['smart','智能：跳过长数字表格'],['all','完整朗读表格'],['skip','跳过已识别表格']])tableMode.append(new Option(title,value));
+  const repeatLabel=element('label',panel),repeatHeaders=element('input',repeatLabel);repeatHeaders.type='checkbox';repeatHeaders.checked=true;
+  repeatLabel.append(document.createTextNode('每行重复表头'));
   for(const n of [.75,1,1.25,1.5,1.75,2])rate.append(new Option(n+'x',String(n),false,n===1));
   const link=element('a',panel,'独立阅读页');link.href='https://laginae.github.io/cozy-read-aloud-web/';link.target='_blank';link.rel='noopener noreferrer';link.referrerPolicy='no-referrer';link.append(createElement(ExternalLink));
-  let queue=[],player;
+  let queue=[],player,lastMode='article';
+  for(const control of [tableMode,repeatHeaders])control.onchange=event=>{if(event.isTrusted)load(lastMode);};
   const voices=()=>speechSynthesis.getVoices().filter(v=>v.localService===true);
   const updateVoices=()=>{
     const before=voice.value;voice.replaceChildren(new Option('自动匹配语言',''));
@@ -63,11 +69,14 @@ export function createCompatReader(root, { read, highlight, clear, close }) {
     onchange:render,onerror:text=>notify(voices().length?text:'浏览器没有提供本机音色。请安装系统语音，或在独立阅读页选择在线音色。')});
   voice.onchange=event=>{if(event.isTrusted)player.stop();};
   function load(mode){
+    lastMode=mode;
     player.stop();queue=[];player.queue=[];player.index=0;error.hidden=true;
     try{
       const blocks=read(mode);
       queue=blocks.flatMap((block,source)=>{
-        const text=speechText.sanitizeAcademicTextForSpeech(block.text,{academicMathMode:'smart',academicMathStyle:'concise',academicSkipNotice:true,mathReadingLanguage:/[\u3400-\u9fff]/.test(block.text)?'chinese':'english'});
+        const options={academicMathMode:'smart',academicMathStyle:'concise',academicSkipNotice:true,academicTableMode:tableMode.value,academicTableRepeatHeaders:repeatHeaders.checked,mathReadingLanguage:/[\u3400-\u9fff]/.test(block.text)?'chinese':'english'};
+        const raw=block.table?[block.table.caption,core.formatTableForSpeech(block.table.headers,block.table.rows,options)].filter(Boolean).join('\n'):block.text;
+        const text=speechText.sanitizeAcademicTextForSpeech(raw,options);
         return chunker.splitTextForSpeechChunks(text,[240]).map(text=>({text,source}));
       });
       if(!queue.length)throw Error('没有可朗读的文字，请重新选择范围。');
