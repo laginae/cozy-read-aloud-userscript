@@ -30,6 +30,9 @@
 </div>
 <label>表格朗读策略<select id="table-mode"><option value="smart">智能：跳过长数字表格</option><option value="all">完整朗读表格</option><option value="skip">跳过已识别表格</option></select></label>
 <label><input id="table-repeat-headers" type="checkbox" checked>每行重复表头</label>
+<label>简单函数读法<select id="function-style" aria-label="简单函数读法"><option value="of">保留 of</option><option value="compact">省略 of</option></select></label>
+<label>区间读法<select id="interval-style" aria-label="区间读法"><option value="precise">保留端点条件</option><option value="range">只读起点到终点</option></select></label>
+<details id="academic-preview"><summary>实际读法预览（本地文字）</summary></details>
 <label><input id="follow" type="checkbox" checked>自动跟随</label><label><input id="academic" type="checkbox" checked>学术模式（略过复杂公式）</label></div>
 </section>
 <nav id="outline" aria-label="文档大纲" hidden></nav>

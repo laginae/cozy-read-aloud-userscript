@@ -6,6 +6,8 @@ Listen to web articles, selected text and local PDFs in your browser, without Ob
 
 ## Install and Start
 
+Open **Reading preview** in voice settings to compare function, interval and table wording using fixed local examples. Neither panel starts synthesis for a preview. Changing scope cannot resume a passage from an older queue.
+
 1. Install [Tampermonkey](https://www.tampermonkey.net/) and enable **Allow user scripts** when prompted.
 2. Download `cozy-read-aloud.user.js` from the [latest release](https://github.com/laginae/cozy-read-aloud-userscript/releases/latest). Import it through Tampermonkey's **Dashboard > Utilities**, then confirm installation.
 3. Refresh an ordinary webpage, click the speaker in the lower-right corner, load the article or selection, and press Play.

@@ -1,4 +1,12 @@
-# 0.2.2
+# 0.2.3
+
+- Compare function, interval and table wording in an offline text preview in both panels. The preview uses only fixed public examples and never calls a voice provider.
+- Changing the isolated reader's scope invalidates the old navigation queue. Changing compatibility preferences reformats the already captured range and never rereads the entire page.
+- Passage drags commit once; a drag from a replaced queue cannot jump the new one. The compatibility panel remains local-voice-only.
+
+Install the updated script from Releases and refresh any already open page.
+
+## 0.2.2
 
 - Add a default-on "Repeat table headers for each row" control in both the isolated reader and local-voice compatibility panel. Turn it off to announce simple webpage table headers once, followed by row values.
 - Keep smart/all/skip table policy independent. Preserve blank-cell positions and zero values; do not infer headers for nested/merged tables, partial selections or PDF text.

@@ -1,6 +1,9 @@
 import { createIcons, Maximize2, Minimize2, X, FileText, TextSelect, ListStart, FolderOpen, Settings2, SkipBack, Play, Pause, Square, SkipForward, ListTree, Headphones, ZoomIn, ZoomOut, Trash2 } from 'lucide';
 import { readFile, renderPdf, buildQueue, selectionQueue, viewportRectangle } from '../vendor/web/src/documents.js';
 import { capturePdfSelection } from '../vendor/web/src/pdf-selection.js';
+import { bindReadingPreview } from '../vendor/web/src/reading-preview.js';
+import { formatPreviewSample } from '../vendor/web/src/speech-queue.js';
+import { passageSeek } from '../vendor/web/src/passage-seek.js';
 import { SpeechPlayer } from './speech.js';
 import { ApiPlayer } from './api-player.js';
 import chunker from '../vendor/mobile/sentence-chunker.js';
@@ -12,6 +15,8 @@ const post = data => parent.postMessage({ cozy: true, ...data }, '*');
 const settings = { academic: true, mathMode: 'smart', mathLanguage: 'auto', skipHeaders: true, footnoteMode: 'body', tableMode: 'smart', academicTableRepeatHeaders: true };
 let doc = null, snapshot = null, loading = null, expanded = false, suspendedUntil = 0, sourceKind = '', currentItem = null;
 let player, requestedDocument = true;
+const refreshPreview=bindReadingPreview($('academic-preview'),()=>settings,()=>'zh-CN',formatPreviewSample);
+const updatePassageSlider=passageSeek($('progress'),()=>player.queue,value=>player.seek(value),true);
 const notify = text => { $('notice').textContent = text; $('notice').hidden = !text; };
 function voices() { return speechSynthesis.getVoices().filter(v => v.localService === true || $('remote-voices').checked); }
 function updateVoices() {
@@ -60,8 +65,7 @@ function renderPlayer(p) {
   $('play').title = $('play').ariaLabel;
   $('play').innerHTML = `<i data-lucide="${p.state === 'playing' ? 'pause' : 'play'}"></i>`;
   $('status').textContent = ({idle:'已就绪',loading:'合成中',playing:'朗读中',paused:'已暂停',ended:'已读完'})[p.state];
-  $('progress').max = String(Math.max(1, p.queue.length - 1));
-  $('progress').value = String(Math.min(p.index, p.queue.length - 1));
+  updatePassageSlider(p.index,p.queue.length);
   $('progress').disabled = !p.queue.length || !!loading;
   $('previous').disabled = !p.queue.length || p.index <= 0 || !!loading;
   $('next').disabled = !p.queue.length || p.index >= p.queue.length - 1 || !!loading;
@@ -124,7 +128,10 @@ function saveSelection() {
   }
 }
 document.addEventListener('selectionchange', saveSelection);
-document.addEventListener('pointerup', saveSelection);
+document.addEventListener('pointerup',event=>{
+  if(doc?.root.contains(event.target) && getSelection()?.isCollapsed)snapshot=null;
+  else saveSelection();
+});
 $('play').onclick = event => {
   if (!event.isTrusted) return;
   if (player.state === 'playing' || player.state === 'paused') { player.toggle(); return; }
@@ -141,12 +148,12 @@ $('play').onclick = event => {
 $('stop').onclick = stop;
 $('previous').onclick = () => player.seek(player.index - 1);
 $('next').onclick = () => player.seek(player.index + 1);
-$('progress').onchange = () => player.seek(Number($('progress').value));
 $('rate').onchange = () => { if(player===apiPlayer)apiPlayer.updateRate();else if (player.state === 'playing' || player.state === 'paused') notify('新倍速从下一段开始生效。'); };
-$('scope').onchange = () => player.stop();
-$('academic').onchange = () => { settings.academic = $('academic').checked; player.stop(); };
-$('table-mode').onchange = () => { settings.tableMode = $('table-mode').value; player.stop(); };
-$('table-repeat-headers').onchange = () => { settings.academicTableRepeatHeaders = $('table-repeat-headers').checked; player.stop(); };
+function invalidateQueue(){ player.queue=[]; player.index=0; player.stop(); }
+$('scope').onchange = invalidateQueue;
+for(const [id,key] of [['academic','academic'],['table-mode','tableMode'],['table-repeat-headers','academicTableRepeatHeaders'],['function-style','academicFunctionStyle'],['interval-style','academicIntervalStyle']]){
+  $(id).onchange=()=>{settings[key]=$(id).type==='checkbox'?$(id).checked:$(id).value;invalidateQueue();refreshPreview();};
+}
 $('remote-voices').onchange = () => { player.stop(); updateVoices(); };
 $('voice').onchange = () => player.stop();
 function selectEngine() {

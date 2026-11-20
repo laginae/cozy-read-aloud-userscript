@@ -3,3 +3,6 @@
  #settings select,#settings input[type=password],#settings input[type=text]{display:block;width:100%;min-width:0;padding:6px;border:1px solid #cbd7d2;border-radius:4px;background:white;margin-top:4px}#api-options{padding:8px 0;border-bottom:1px solid #dce3e0;margin-bottom:8px}#api-options a{display:block;color:#147d73;font-size:12px;margin:7px 0}#clear-key{padding:5px 9px;font-size:12px}
  #mimo-options{padding:8px 0;border-bottom:1px solid #dce3e0;margin-bottom:8px}#mimo-options a{display:block;color:#147d73;font-size:12px;margin:7px 0}#clear-mimo{padding:5px 9px;font-size:12px}
  #settings{max-height:min(320px,38vh);scrollbar-gutter:stable;overscroll-behavior:contain}@media(max-height:480px){#settings{max-height:90px}}
+#academic-preview { grid-column: 1/-1; min-width: 0; }
+#academic-preview dl { margin: 6px 0; }
+#academic-preview dd { margin: 2px 0 8px; overflow-wrap: anywhere; white-space: pre-line; }

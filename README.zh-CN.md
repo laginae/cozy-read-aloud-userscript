@@ -6,6 +6,8 @@
 
 ## 安装与开始
 
+在语音设置中展开“实际读法预览（本地文字）”，可用固定示例对照函数、区间和表格的读法。两种面板都不为预览调用接口；更改朗读范围不会再沿用旧队列。
+
 1. 安装 [Tampermonkey](https://www.tampermonkey.net/)，按扩展提示开启“允许用户脚本”。
 2. 从 [GitHub 最新发布](https://github.com/laginae/cozy-read-aloud-userscript/releases/latest) 下载 `cozy-read-aloud.user.js`，在 Tampermonkey 管理面板的“实用工具”中导入并确认安装。
 3. 刷新普通网页，点击右下角扬声器，载入正文或选区，再点击播放。

@@ -37,8 +37,17 @@ try {
       panel = await handle.contentFrame(); await panel.locator('.prose').waitFor();
       await panel.getByRole('button', { name: '语音设置', exact: true }).click();
     }
-    const repeat = panel.getByLabel('每行重复表头', { exact: true });
     const runtime = compatibility ? page : panel;
+    const repeat = panel.getByLabel('每行重复表头', { exact: true });
+    await panel.getByText('实际读法预览（本地文字）',{exact:true}).click();
+    const before=await panel.locator('details dd').allTextContents();
+    for(const name of ['简单函数读法','区间读法']){
+      const select=panel.getByLabel(name,{exact:true});await select.focus();await select.press('End');
+    }
+    const after=await panel.locator('details dd').allTextContents();
+    assert.equal(after.length,3);assert.notEqual(after[0],before[0]);assert.notEqual(after[1],before[1]);
+    assert.equal(await runtime.evaluate(()=>__spoken.length),0);
+    await panel.getByText('实际读法预览（本地文字）',{exact:true}).click();
     assert.equal(await repeat.isChecked(), true);
     if (!compatibility) await panel.getByRole('button', { name: '语音设置', exact: true }).click();
     async function readAll() {

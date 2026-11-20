@@ -3,6 +3,8 @@ import { SpeechPlayer } from './speech.js';
 import chunker from '../vendor/mobile/sentence-chunker.js';
 import speechText from '../vendor/mobile/speech-text.js';
 import core from '@laginae/note-reader-core';
+import { bindReadingPreview } from '../vendor/web/src/reading-preview.js';
+import { passageSeek } from '../vendor/web/src/passage-seek.js';
 
 // This panel belongs to the host DOM: it must never collect keys or import files.
 export function createCompatReader(root, { read, highlight, clear, close }) {
@@ -34,7 +36,7 @@ export function createCompatReader(root, { read, highlight, clear, close }) {
   const next=button(transport,'下一段',SkipForward,()=>player.seek(player.index+1),true);
   const status=element('span',transport,'已就绪');status.className='compat-state';status.setAttribute('role','status');
   const progress=element('input',panel);progress.type='range';progress.min='0';progress.max='1';progress.value='0';progress.ariaLabel='分段进度';
-  progress.onchange=event=>{if(event.isTrusted)player.seek(Number(progress.value));};
+  const updatePassageSlider=passageSeek(progress,()=>player.queue,value=>player.seek(value),true);
   const error=element('p',panel);error.className='compat-error';error.hidden=true;error.setAttribute('role','status');
   const preview=element('div',panel);preview.className='compat-preview';
   const voiceLabel=element('label',panel,'本机音色');const voice=element('select',voiceLabel);voice.ariaLabel='本机音色';
@@ -43,10 +45,15 @@ export function createCompatReader(root, { read, highlight, clear, close }) {
   for(const [value,title]of [['smart','智能：跳过长数字表格'],['all','完整朗读表格'],['skip','跳过已识别表格']])tableMode.append(new Option(title,value));
   const repeatLabel=element('label',panel),repeatHeaders=element('input',repeatLabel);repeatHeaders.type='checkbox';repeatHeaders.checked=true;
   repeatLabel.append(document.createTextNode('每行重复表头'));
+  const choice=(title,options)=>{const el=element('select',element('label',panel,title));el.ariaLabel=title;for(const [value,label]of options)el.append(new Option(label,value));return el;};
+  const fn=choice('简单函数读法',[['of','保留 of'],['compact','省略 of']]),interval=choice('区间读法',[['precise','保留端点条件'],['range','只读起点到终点']]);
+  const examples=element('details',panel);element('summary',examples,'实际读法预览（本地文字）');
+  const optionsFor=text=>({academicMathMode:'smart',academicMathStyle:'concise',academicSkipNotice:true,academicTableMode:tableMode.value,academicTableRepeatHeaders:repeatHeaders.checked,academicFunctionStyle:fn.value,academicIntervalStyle:interval.value,mathReadingLanguage:/[\u3400-\u9fff]/.test(text)?'chinese':'english'});
+  const refreshPreview=bindReadingPreview(examples,()=>null,()=>'zh-CN',text=>speechText.sanitizeAcademicTextForSpeech(text,optionsFor(text)));
   for(const n of [.75,1,1.25,1.5,1.75,2])rate.append(new Option(n+'x',String(n),false,n===1));
   const link=element('a',panel,'独立阅读页');link.href='https://laginae.github.io/cozy-read-aloud-web/';link.target='_blank';link.rel='noopener noreferrer';link.referrerPolicy='no-referrer';link.append(createElement(ExternalLink));
-  let queue=[],player,lastMode='article';
-  for(const control of [tableMode,repeatHeaders])control.onchange=event=>{if(event.isTrusted)load(lastMode);};
+  let queue=[],player,sourceBlocks=[];
+  for(const control of [tableMode,repeatHeaders,fn,interval])control.onchange=event=>{if(event.isTrusted){refreshPreview();load(null);}};
   const voices=()=>speechSynthesis.getVoices().filter(v=>v.localService===true);
   const updateVoices=()=>{
     const before=voice.value;voice.replaceChildren(new Option('自动匹配语言',''));
@@ -60,7 +67,7 @@ export function createCompatReader(root, { read, highlight, clear, close }) {
     play.replaceChildren(createElement(p.state==='playing'?Pause:Play));play.disabled=!queue.length;
     status.textContent=({idle:'已就绪',playing:'朗读中',paused:'已暂停',ended:'已读完'})[p.state]+(queue.length?` · ${Math.min(p.index+1,queue.length)}/${queue.length}`:'');
     previous.disabled=!queue.length||p.index<=0;next.disabled=!queue.length||p.index>=queue.length-1;
-    progress.max=String(Math.max(1,queue.length-1));progress.value=String(Math.max(0,Math.min(p.index,queue.length-1)));progress.disabled=!queue.length;
+    updatePassageSlider(p.index,queue.length);
     preview.textContent=queue[p.index]?.text||queue[0]?.text||'';
     if(active)highlight(queue[p.index]?.source,true);else clear();
   };
@@ -69,12 +76,11 @@ export function createCompatReader(root, { read, highlight, clear, close }) {
     onchange:render,onerror:text=>notify(voices().length?text:'浏览器没有提供本机音色。请安装系统语音，或在独立阅读页选择在线音色。')});
   voice.onchange=event=>{if(event.isTrusted)player.stop();};
   function load(mode){
-    lastMode=mode;
     player.stop();queue=[];player.queue=[];player.index=0;error.hidden=true;
     try{
-      const blocks=read(mode);
-      queue=blocks.flatMap((block,source)=>{
-        const options={academicMathMode:'smart',academicMathStyle:'concise',academicSkipNotice:true,academicTableMode:tableMode.value,academicTableRepeatHeaders:repeatHeaders.checked,mathReadingLanguage:/[\u3400-\u9fff]/.test(block.text)?'chinese':'english'};
+      if(mode){sourceBlocks=[];sourceBlocks=read(mode);}
+      queue=sourceBlocks.flatMap((block,source)=>{
+        const options=optionsFor(block.text);
         const raw=block.table?[block.table.caption,core.formatTableForSpeech(block.table.headers,block.table.rows,options)].filter(Boolean).join('\n'):block.text;
         const text=speechText.sanitizeAcademicTextForSpeech(raw,options);
         return chunker.splitTextForSpeechChunks(text,[240]).map(text=>({text,source}));
@@ -87,6 +93,6 @@ export function createCompatReader(root, { read, highlight, clear, close }) {
   speechSynthesis.addEventListener('voiceschanged',updateVoices);updateVoices();render(player);
   return {
     open(mode){panel.hidden=false;if(mode||!queue.length)load(mode||'article');},
-    dispose(){player.stop();queue=[];speechSynthesis.removeEventListener('voiceschanged',updateVoices);panel.remove();style.remove();},
+    dispose(){player.stop();queue=[];sourceBlocks=[];speechSynthesis.removeEventListener('voiceschanged',updateVoices);panel.remove();style.remove();},
   };
 }

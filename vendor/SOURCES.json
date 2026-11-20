@@ -1,6 +1,6 @@
 {
   "repository": "https://github.com/laginae/cozy-read-aloud-web",
-  "commit": "7018ce4bfd9dfae8a6f68e0c2dc311c390b98514",
+  "commit": "6156ed686abda4d6884a4ce2638e3516e4198f54",
   "files": [
     {
       "source": "LICENSE",
@@ -33,14 +33,24 @@
       "sha256": "b09fdefc7258c510f71db8ddcc2bc39b37b3560898f1afbaca1f14a4f27f22b2"
     },
     {
+      "source": "src/passage-seek.js",
+      "target": "vendor/web/src/passage-seek.js",
+      "sha256": "7714939516a19e8a8d2fd406500c835ec06a744163f5f87984a8a03d5276db62"
+    },
+    {
       "source": "src/pdf-selection.js",
       "target": "vendor/web/src/pdf-selection.js",
       "sha256": "865e07e24b015c48ff27c3ad7f74ec5949e7ca4b5785c5fdbbe6608ceabc3ee5"
     },
     {
+      "source": "src/reading-preview.js",
+      "target": "vendor/web/src/reading-preview.js",
+      "sha256": "c8fe9f353e134eeaefcd1f43be57b7765af9d2f1cfcaacfa84b83f0efc067346"
+    },
+    {
       "source": "src/speech-queue.js",
       "target": "vendor/web/src/speech-queue.js",
-      "sha256": "b6454d1ac99b50185f75434e3c563577849c39cd7d5467d2a6511346e9e2ce53"
+      "sha256": "71e14b54e8124bb38c9bb95d02db9d4f2f29b8624832349d52412a31447a0e32"
     },
     {
       "source": "src/table-data.js",
@@ -55,12 +65,17 @@
     {
       "source": "vendor/core/index.js",
       "target": "vendor/core/index.js",
-      "sha256": "829402b6a66e705312e474e7880faefe2e8f9b383571d880ffdf7db448605a28"
+      "sha256": "8a5ada32053c643341721a1745d32e88a3aefab02f9f499e377bef4dfab5966b"
     },
     {
       "source": "vendor/core/package.json",
       "target": "vendor/core/package.json",
-      "sha256": "dcb89f1e583a8e6011d7567753a64d6dbc210dd1aa3da62b1f7a0527139bc288"
+      "sha256": "460f5c8b9c265eee82e0e18c1d78e218d718ca9a422430c989028d9648e93918"
+    },
+    {
+      "source": "vendor/core/src/academic-preview.js",
+      "target": "vendor/core/src/academic-preview.js",
+      "sha256": "34d8b1933a25113dd418ea798f7e9ab2a952e526eeff2bc0d285a9b7d9a14b14"
     },
     {
       "source": "vendor/core/src/academic-speech.js",

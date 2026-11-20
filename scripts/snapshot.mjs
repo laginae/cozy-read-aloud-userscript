@@ -3,7 +3,7 @@ import { cp, mkdir, readFile, writeFile } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
 import path from 'node:path';
 const upstream = path.resolve('../cozy-read-aloud-web');
-const selected = new Set(['src/documents.js', 'src/table-data.js', 'src/speech-queue.js', 'src/pdf-selection.js', 'src/import-lifecycle.js', 'src/follow.js', 'public/pdf-text-layer.css', 'public/assets/cozy-cat.png', 'LICENSE']);
+const selected = new Set(['src/documents.js', 'src/table-data.js', 'src/speech-queue.js', 'src/reading-preview.js', 'src/passage-seek.js', 'src/pdf-selection.js', 'src/import-lifecycle.js', 'src/follow.js', 'public/pdf-text-layer.css', 'public/assets/cozy-cat.png', 'LICENSE']);
 const files = execFileSync('git', ['ls-files', '-z'], { cwd: upstream, encoding: 'utf8' }).split('\0').filter(file => file && (file.startsWith('vendor/') || selected.has(file)));
 const records = [];
 for (const file of files) {
