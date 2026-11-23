@@ -1,5 +1,5 @@
 import { createIcons, Maximize2, Minimize2, X, FileText, TextSelect, ListStart, FolderOpen, Settings2, SkipBack, Play, Pause, Square, SkipForward, ListTree, Headphones, ZoomIn, ZoomOut, Trash2 } from 'lucide';
-import { readFile, renderPdf, buildQueue, selectionQueue, viewportRectangle } from '../vendor/web/src/documents.js';
+import { readFile, renderPdf, buildQueue, selectionQueue, viewportRectangle, outlineTarget } from '../vendor/web/src/documents.js';
 import { capturePdfSelection } from '../vendor/web/src/pdf-selection.js';
 import { bindReadingPreview } from '../vendor/web/src/reading-preview.js';
 import { formatPreviewSample } from '../vendor/web/src/speech-queue.js';
@@ -99,7 +99,7 @@ function showDocument(next, kind) {
   for (const item of doc.outline || []) {
     const button = document.createElement('button'); button.textContent = item.title;
     button.style.paddingLeft = `${Math.min(4, item.level || 1) * 6}px`;
-    button.onclick = () => { item.el.scrollIntoView({ block:'start' }); $('outline').hidden = true; $('outline-toggle').ariaExpanded = 'false'; };
+    button.onclick = () => { outlineTarget(item).scrollIntoView({ block:'start' }); $('outline').hidden = true; $('outline-toggle').ariaExpanded = 'false'; };
     $('outline').append(button);
   }
   if (doc.kind === 'pdf') renderPdf(doc, $('reader'), () => { if(currentItem) highlight(currentItem, false); }, notify);

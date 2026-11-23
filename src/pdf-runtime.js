@@ -20,6 +20,7 @@ export function loadPdfRuntime() {
     }
     return {
       TextLayer: module.TextLayer,
+      OPS: module.OPS,
       getDocument: options => module.getDocument({ ...options,
         cMapUrl: undefined, standardFontDataUrl: undefined, wasmUrl: undefined,
         CMapReaderFactory: CMaps, StandardFontDataFactory: Fonts,

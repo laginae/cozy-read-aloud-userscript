@@ -1,4 +1,10 @@
-# 0.2.3
+# 0.2.4
+
+- The isolated PDF reader now infers supported chapter hierarchies in unbookmarked text PDFs. Page navigation remains the fallback.
+- Academic PDF reading skips complex equation blocks and preserves simple decorated variables, inclusive comparisons and standalone reference numbers, including in selected text.
+- No new userscript permissions, network destinations or automatic voice requests.
+
+## 0.2.3
 
 - Compare function, interval and table wording in an offline text preview in both panels. The preview uses only fixed public examples and never calls a voice provider.
 - Changing the isolated reader's scope invalidates the old navigation queue. Changing compatibility preferences reformats the already captured range and never rereads the entire page.

@@ -1,6 +1,6 @@
 {
   "repository": "https://github.com/laginae/cozy-read-aloud-web",
-  "commit": "6156ed686abda4d6884a4ce2638e3516e4198f54",
+  "commit": "cf187faa7fe85fadb5d812258cc204f5fe7f50ce",
   "files": [
     {
       "source": "LICENSE",
@@ -20,7 +20,7 @@
     {
       "source": "src/documents.js",
       "target": "vendor/web/src/documents.js",
-      "sha256": "1ec536f2eb7785d92869cb041a82a502beeed7a8b879d43107f803e2fc216183"
+      "sha256": "8ff9df14aedb04b27fea291c3561adeec014ae8c329d8c35c8790f4f8f1995b0"
     },
     {
       "source": "src/follow.js",
@@ -50,7 +50,7 @@
     {
       "source": "src/speech-queue.js",
       "target": "vendor/web/src/speech-queue.js",
-      "sha256": "71e14b54e8124bb38c9bb95d02db9d4f2f29b8624832349d52412a31447a0e32"
+      "sha256": "3618f1f2dbdfc184209f2fb966213f7c43c3a6959ad901991583058901ae1c97"
     },
     {
       "source": "src/table-data.js",
@@ -70,7 +70,7 @@
     {
       "source": "vendor/core/package.json",
       "target": "vendor/core/package.json",
-      "sha256": "460f5c8b9c265eee82e0e18c1d78e218d718ca9a422430c989028d9648e93918"
+      "sha256": "d33edb2dab0b84f078d63231fd52438421c18a7d1eb8a374f7c20d4e89477025"
     },
     {
       "source": "vendor/core/src/academic-preview.js",
@@ -80,12 +80,12 @@
     {
       "source": "vendor/core/src/academic-speech.js",
       "target": "vendor/core/src/academic-speech.js",
-      "sha256": "d7b64609a008862e381feacf99c9a615a42eb4d5e49f368629104236c7600790"
+      "sha256": "879524667344b7617430058cc45c87f85e39b9f01fb1188a7acc529efa54d585"
     },
     {
       "source": "vendor/core/src/math-collections.js",
       "target": "vendor/core/src/math-collections.js",
-      "sha256": "ae83448da7be59f1c68258a7a3b915c14167fb70200801b8a01adba8f0285865"
+      "sha256": "36333ea4639028f4e01d0d1b01777ede86ee69041062f13b873f9b38e9e36224"
     },
     {
       "source": "vendor/core/src/math-fractions.js",
@@ -140,17 +140,17 @@
     {
       "source": "vendor/core/src/text-cleaning.js",
       "target": "vendor/core/src/text-cleaning.js",
-      "sha256": "3c3e917fb0737d7af605703ee461e15f091c63ed662a2f8996098edcbb0f3e13"
+      "sha256": "123a0ad3cdeb59613590802179d951e8e3edabf6768e510d11a30034fc6ce887"
     },
     {
       "source": "vendor/core/test/math-golden-fixtures.cjs",
       "target": "vendor/core/test/math-golden-fixtures.cjs",
-      "sha256": "2a881c088b8c59fdfd637bc9af9f5c2f599224df8581a1ad73c99b88ee92d6a2"
+      "sha256": "86eb9e43e466d34a3fb0f33add5692783da0c45e2f211640b37e8d7dc25051b0"
     },
     {
       "source": "vendor/core/test/pdf-golden-fixtures.cjs",
       "target": "vendor/core/test/pdf-golden-fixtures.cjs",
-      "sha256": "c088a29a7f3cb65e3d9f7b129e43b0e1cead2a9e73234aa748741e9e1730a79a"
+      "sha256": "7bde4d6ecc42a8e7f2c12debaa9a65c977452dbf7f9c5a160cc45f8eedf65f22"
     },
     {
       "source": "vendor/mobile/LICENSE",
@@ -175,7 +175,7 @@
     {
       "source": "vendor/mobile/pdf-speech.js",
       "target": "vendor/mobile/pdf-speech.js",
-      "sha256": "0c4888102b7ba7e3779a2bcf40048b8e2ee9aca049b05509a611f1abdae73e9b"
+      "sha256": "15ab032b071c788212b29540a04718816942f6950927f3e0eb2466f52a75c438"
     },
     {
       "source": "vendor/mobile/pdf-speech/academic-speech.js",
@@ -210,7 +210,7 @@
     {
       "source": "vendor/mobile/pdf-speech/pdf-math.js",
       "target": "vendor/mobile/pdf-speech/pdf-math.js",
-      "sha256": "c3ddb75d68c5a54ee6b6f18c051a26b5a45ad8bfffe4783540d473a8e36e4145"
+      "sha256": "749e45c77158f3673dd475390db054e3c5f95e993366b26fe586d440da46a373"
     },
     {
       "source": "vendor/mobile/pdf-speech/structured-math.js",
@@ -231,6 +231,36 @@
       "source": "vendor/mobile/speech-text.js",
       "target": "vendor/mobile/speech-text.js",
       "sha256": "4dfd20787d709be38a4129d3d29a2bbb9521ed9391e3f1bffe3b90281199f858"
+    },
+    {
+      "source": "src/pdf-chapters.js",
+      "target": "vendor/web/src/pdf-chapters.js",
+      "sha256": "2ba2695715eb87e85fb2c22be59b994a82e8ba8d0c3e203c1d4589cff199f35e"
+    },
+    {
+      "source": "vendor/core/src/reading-profiles.js",
+      "target": "vendor/core/src/reading-profiles.js",
+      "sha256": "17414e62f8b34e886971c33adba273b380862e9f360d12c652c2c5b6178b4f73"
+    },
+    {
+      "source": "vendor/core/src/pdf-heading-hierarchy.js",
+      "target": "vendor/core/src/pdf-heading-hierarchy.js",
+      "sha256": "5072ae782567d3d35959e749b8027a9965d6ecd618ac2c73f52509870d4c49bc"
+    },
+    {
+      "source": "vendor/mobile/pdf-outline.js",
+      "target": "vendor/mobile/pdf-outline.js",
+      "sha256": "3c02768b8b06d2c56b9f7c74fb603a72549a7381215734364033361da31d0898"
+    },
+    {
+      "source": "vendor/mobile/pdf-outline-detection.js",
+      "target": "vendor/mobile/pdf-outline-detection.js",
+      "sha256": "522db47da8000817e4b31f17ba26cba01c274472444a232af323e0d48e4697b0"
+    },
+    {
+      "source": "vendor/mobile/pdf-speech/pdf-math-bars.js",
+      "target": "vendor/mobile/pdf-speech/pdf-math-bars.js",
+      "sha256": "ceefe5d7c0b31149abcdc600b93d628fb8777d4311eb55af941a02e50c38c037"
     }
   ]
 }
